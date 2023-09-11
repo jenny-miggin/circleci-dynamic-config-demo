@@ -1,0 +1,23 @@
+version: 2.1
+
+setup: true
+
+parameters:
+  base-revision:
+    type: string
+    default: "main"
+
+orbs:
+  path-filtering: circleci/path-filtering@1.0.0
+
+workflows:
+  setup-workflow:
+    jobs:
+      - path-filtering/filter:
+          mapping: |
+            packages/api/.* api true
+            packages/auth/.* auth true
+            packages/e2e/.* e2e true
+            packages/unit/.* unit true
+          # # Optional, defaults to main:
+          base-revision: << pipeline.git.base_revision >>
