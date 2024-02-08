@@ -10,6 +10,9 @@ parameters:
   Pro31:
     type: boolean
     default: false
+  build-all:
+    type: boolean
+    default: false
 
 jobs:
   vb6-build:
@@ -50,3 +53,10 @@ workflows:
     when: << pipeline.parameters.Pro31 >>
     jobs:
       - pro31-build
+  build-all:
+    when: << pipeline.parameters.build-all >>
+    jobs:
+      - GIS108-build
+      - pro31-build:
+          requires:
+            - GIS108-build
