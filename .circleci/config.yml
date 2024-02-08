@@ -15,9 +15,7 @@ workflows:
     jobs:
       - path-filtering/filter:
           mapping: |
-            packages/api/.* api true
-            packages/auth/.* auth true
-            packages/e2e/.* e2e true
-            packages/unit/.* unit true
+            build/vb6/.* vb6 true
+            ^ArcGIS108. GIS108 true
           # # Optional, defaults to main:
           base-revision: << pipeline.git.base_revision >>
