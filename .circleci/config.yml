@@ -17,5 +17,6 @@ workflows:
           mapping: |
             build/vb6/.* vb6 true
             ^.*ArcGIS108.* GIS108 true
+            ^.*ArcGISPro31.* Pro31 true
           # # Optional, defaults to main:
           base-revision: << pipeline.git.base_revision >>
