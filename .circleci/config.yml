@@ -48,7 +48,7 @@ jobs:
                   echo << pipeline.parameters.product >>
      - continuation/continue:
          configuration_path: .circleci/continue_config.yml
-         parameters: /tmp/pipeline-parameters.json
+        #  parameters: /tmp/pipeline-parameters.json
 
 workflows:
   setup-workflow:
