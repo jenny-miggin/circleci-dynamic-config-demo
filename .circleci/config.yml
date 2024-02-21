@@ -35,7 +35,7 @@ jobs:
                 name: No parameter entered. Doing path-filtering
                 command: echo "No parameter entered. Doing path-filtering"
             - path-filtering/set-parameters:
-                base-revision: main
+                base-revision: << pipeline.parameters.base-revision >>
                 output-path: "/tmp/pipeline-parameters.json"
                 mapping: |
                   src/dependancies/.* build-all true
