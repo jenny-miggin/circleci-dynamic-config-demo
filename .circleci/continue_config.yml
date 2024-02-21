@@ -6,6 +6,9 @@ parameters:
     description: Select the product to build
     type: enum
     enum: ["vb6", "GIS108", "Pro31", "build-all", "none"]
+  build-all:
+    type: boolean
+    default: false
 
 jobs:
   vb6-build:
@@ -51,7 +54,9 @@ workflows:
       - pro31-build
   build-all:
     when: 
-      equal: ["build-all", << pipeline.parameters.product >>]
+      or:
+        - equal: ["build-all", << pipeline.parameters.product >>]
+        - << pipeline.parameters.build-all >>
     jobs:
       - GIS108-build
       - pro31-build:
