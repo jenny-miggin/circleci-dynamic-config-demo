@@ -22,7 +22,54 @@ parameters:
 orbs:
   path-filtering: circleci/path-filtering@1.0.0
 
+
+jobs:
+  vb6-build:
+    docker:
+      - image: cimg/base:2021.01
+    steps:
+      - run:
+          name: echo Hello
+          command: |
+            echo "This is the vb6 build"
+  GIS108-build:
+    docker:
+      - image: cimg/base:2021.01
+    steps:
+      - run:
+          name: echo Hello
+          command: |
+            echo "This is the GIS108 build"
+  pro31-build:
+    docker:
+      - image: cimg/base:2021.01
+    steps:
+      - run:
+          name: echo Testing
+          command: |
+            echo "This is the Pro31 build"
+
 workflows:
+  vb6:
+    when: << pipeline.parameters.vb6 >>
+    jobs:
+      - vb6-build
+  GIS108:
+    when: << pipeline.parameters.GIS108 >>
+    jobs:
+      - GIS108-build
+  pro31:
+    when: << pipeline.parameters.Pro31 >>
+    jobs:
+      - pro31-build
+  build-all:
+    when: << pipeline.parameters.build-all >>
+    jobs:
+      - GIS108-build
+      - pro31-build:
+          requires:
+            - GIS108-build
+
   setup-workflow:
     jobs:
       - path-filtering/filter:
@@ -33,3 +80,4 @@ workflows:
             src/dependancies/.* build-all true
           # # Optional, defaults to main:
           base-revision: << pipeline.git.base_revision >>
+          config-path: .circleci/config.yml
