@@ -31,6 +31,9 @@ jobs:
              - equal: ["none", << pipeline.parameters.product >>]
           steps:
               # The path-filtering/filter job determines which pipeline parameters to update.
+            - run:
+                name: No parameter entered. Doing path-filtering
+                command: echo "No parameter entered. Doing path-filtering"
             - path-filtering/set-parameters:
                 base-revision: main
                 output-path: "/tmp/pipeline-parameters.json"
@@ -46,9 +49,9 @@ jobs:
                   equal: ["none", << pipeline.parameters.product >>]
           steps:
             - run:
+                name: Triggered with a parameter. Building << pipeline.parameters.product >>
                 command: |
-                  # echo '{ "product": "<< pipeline.parameters.product >>" }' > /tmp/pipeline-parameters.json
-                  echo << pipeline.parameters.product >>
+                  echo "Building << pipeline.parameters.product >>"
             - continuation/continue:
                 configuration_path: .circleci/continue_config.yml
 
