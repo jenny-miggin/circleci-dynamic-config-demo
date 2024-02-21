@@ -44,7 +44,8 @@ jobs:
           steps:
             - run:
                 command: |
-                  echo '{ "product": "<< pipeline.parameters.product >>" }' > /tmp/pipeline-parameters.json
+                  # echo '{ "product": "<< pipeline.parameters.product >>" }' > /tmp/pipeline-parameters.json
+                  echo << pipeline.parameters.product >>
      - continuation/continue:
          configuration_path: .circleci/continue_config.yml
          parameters: /tmp/pipeline-parameters.json
