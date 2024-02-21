@@ -10,7 +10,7 @@ parameters:
     default: "none"
     description: Select the product to build
     type: enum
-    enum: ["all", "vb6", "GIS108", "Pro31", "buildall", "none"]
+    enum: ["vb6", "GIS108", "Pro31", "buildall", "none"]
   build-all:
     type: boolean
     default: false
@@ -51,7 +51,6 @@ jobs:
                   echo << pipeline.parameters.product >>
             - continuation/continue:
                 configuration_path: .circleci/continue_config.yml
-                # parameters: /tmp/pipeline-parameters.json
 
 
 workflows:

@@ -1,18 +1,11 @@
 version: 2.1
 
 parameters:
-  vb6:
-    type: boolean
-    default: false
-  GIS108:
-    type: boolean
-    default: false
-  Pro31:
-    type: boolean
-    default: false
-  build-all:
-    type: boolean
-    default: false
+  product:
+    default: "none"
+    description: Select the product to build
+    type: enum
+    enum: ["vb6", "GIS108", "Pro31", "buildall", "none"]
 
 jobs:
   vb6-build:
@@ -42,19 +35,23 @@ jobs:
 
 workflows:
   vb6:
-    when: << pipeline.parameters.vb6 >>
+    when: 
+      equal: ["vb6", << pipeline.parameters.product >>]
     jobs:
       - vb6-build
   GIS108:
-    when: << pipeline.parameters.GIS108 >>
+    when: 
+      equal: ["GIS108", << pipeline.parameters.product >>]
     jobs:
       - GIS108-build
   pro31:
-    when: << pipeline.parameters.Pro31 >>
+    when: 
+      equal: ["Pro31", << pipeline.parameters.product >>]
     jobs:
       - pro31-build
   build-all:
-    when: << pipeline.parameters.build-all >>
+    when: 
+      equal: ["build-all", << pipeline.parameters.product >>]
     jobs:
       - GIS108-build
       - pro31-build:
