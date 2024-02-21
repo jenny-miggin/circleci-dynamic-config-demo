@@ -36,6 +36,9 @@ jobs:
                 output-path: "/tmp/pipeline-parameters.json"
                 mapping: |
                   src/dependancies/.* build-all true
+            - continuation/continue:
+                configuration_path: .circleci/continue_config.yml
+                parameters: /tmp/pipeline-parameters.json
      - when:
           condition:
             and:
@@ -46,9 +49,10 @@ jobs:
                 command: |
                   # echo '{ "product": "<< pipeline.parameters.product >>" }' > /tmp/pipeline-parameters.json
                   echo << pipeline.parameters.product >>
-     - continuation/continue:
-         configuration_path: .circleci/continue_config.yml
-        #  parameters: /tmp/pipeline-parameters.json
+            - continuation/continue:
+                configuration_path: .circleci/continue_config.yml
+                # parameters: /tmp/pipeline-parameters.json
+
 
 workflows:
   setup-workflow:
