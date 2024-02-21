@@ -6,6 +6,18 @@ parameters:
   base-revision:
     type: string
     default: "main"
+  vb6:
+    type: boolean
+    default: false
+  GIS108:
+    type: boolean
+    default: false
+  Pro31:
+    type: boolean
+    default: false
+  build-all:
+    type: boolean
+    default: false
 
 orbs:
   path-filtering: circleci/path-filtering@1.0.0
