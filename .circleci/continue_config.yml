@@ -5,7 +5,7 @@ parameters:
     default: "none"
     description: Select the product to build
     type: enum
-    enum: ["vb6", "GIS108", "Pro31", "buildall", "none"]
+    enum: ["vb6", "GIS108", "Pro31", "build-all", "none"]
 
 jobs:
   vb6-build:
