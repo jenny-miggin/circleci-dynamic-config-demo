@@ -17,7 +17,7 @@ parameters:
 
 orbs:
   path-filtering: circleci/path-filtering@1.0.0
-  continuation: circleci/continuation@1.0.0
+  continuation: circleci/continuation@0.5.0
 
 jobs:
   run-continuation-config:
