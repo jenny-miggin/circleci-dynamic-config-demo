@@ -6,78 +6,50 @@ parameters:
   base-revision:
     type: string
     default: "main"
-  vb6:
-    type: boolean
-    default: false
-  GIS108:
-    type: boolean
-    default: false
-  Pro31:
-    type: boolean
-    default: false
+  product:
+    default: "none"
+    description: Select the product to build
+    type: enum
+    enum: ["all", "vb6", "GIS108", "Pro31", "buildall", "none"]
   build-all:
     type: boolean
     default: false
 
 orbs:
   path-filtering: circleci/path-filtering@1.0.0
-
+  continuation: circleci/continuation@1.0.0
 
 jobs:
-  vb6-build:
+  run-continuation-config:
     docker:
       - image: cimg/base:2021.01
     steps:
-      - run:
-          name: echo Hello
-          command: |
-            echo "This is the vb6 build"
-  GIS108-build:
-    docker:
-      - image: cimg/base:2021.01
-    steps:
-      - run:
-          name: echo Hello
-          command: |
-            echo "This is the GIS108 build"
-  pro31-build:
-    docker:
-      - image: cimg/base:2021.01
-    steps:
-      - run:
-          name: echo Testing
-          command: |
-            echo "This is the Pro31 build"
+     - checkout
+     - when:
+          condition:
+            and:
+             - equal: ["none", << pipeline.parameters.product >>]
+          steps:
+              # The path-filtering/filter job determines which pipeline parameters to update.
+            - path-filtering/set-parameters:
+                base-revision: master
+                output-path: "/tmp/pipeline-parameters.json"
+                mapping: |
+                  src/dependancies/.* build-all true
+     - when:
+          condition:
+            and:
+              - not:
+                  equal: ["none", << pipeline.parameters.product >>]
+          steps:
+            - run:
+                command: |
+                  echo '{ "product": "<< pipeline.parameters.product >>" }' > /tmp/pipeline-parameters.json
+     - continuation/continue:
+         configuration_path: .circleci/continue_config.yml
+         parameters: /tmp/pipeline-parameters.json
 
 workflows:
-  vb6:
-    when: << pipeline.parameters.vb6 >>
-    jobs:
-      - vb6-build
-  GIS108:
-    when: << pipeline.parameters.GIS108 >>
-    jobs:
-      - GIS108-build
-  pro31:
-    when: << pipeline.parameters.Pro31 >>
-    jobs:
-      - pro31-build
-  build-all:
-    when: << pipeline.parameters.build-all >>
-    jobs:
-      - GIS108-build
-      - pro31-build:
-          requires:
-            - GIS108-build
-
   setup-workflow:
     jobs:
-      - path-filtering/filter:
-          mapping: |
-            build/vb6/.* vb6 true
-            ^.*ArcGIS108.* GIS108 true
-            ^.*ArcGISPro31.* Pro31 true
-            src/dependancies/.* build-all true
-          # # Optional, defaults to main:
-          base-revision: << pipeline.git.base_revision >>
-          config-path: .circleci/config.yml
+      - run-continuation-config
