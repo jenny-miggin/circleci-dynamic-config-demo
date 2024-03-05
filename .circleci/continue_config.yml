@@ -9,6 +9,10 @@ parameters:
   build-all:
     type: boolean
     default: false
+  build-ibase-binaries:
+    description: A boolean indicating whether or not to build the iBase .NET binaries
+    type: boolean
+    default: false
 
 jobs:
   vb6-build:
@@ -35,6 +39,15 @@ jobs:
           name: echo Testing
           command: |
             echo "This is the Pro31 build"
+  iBase-build:
+    docker:
+      - image: cimg/base:2021.01
+    steps:
+      - run:
+          name: echo Testing
+          command: |
+            echo "This is the iBase build"
+
 
 workflows:
   vb6:
@@ -59,6 +72,8 @@ workflows:
         - << pipeline.parameters.build-all >>
     jobs:
       - GIS108-build
-      - pro31-build:
-          requires:
-            - GIS108-build
+  build-iBase:
+    when: 
+      condition: << pipeline.parameters.build-ibase-binaries >>
+    jobs:
+      - iBase-build
